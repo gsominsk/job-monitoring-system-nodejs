@@ -102,6 +102,7 @@ Set via `.env` file or direct environment variables:
 ## Deployment Options & CI/CD
 
 This application is ready to be deployed on multiple cloud architectures.
+- **Stand-alone Executables (Zero Setup)**: Pre-compiled binaries for Windows (`.exe`), macOS, and Linux are automatically attached to every [GitHub Release](https://github.com/gsominsk/job-monitoring-system-nodejs/releases).
 - **Docker/Docker Compose**: Pre-configured via `Dockerfile` and `docker-compose.yml`.
 - **Kubernetes**: Manifests available in the `/k8s/` directory (includes Deployment, NodePort/LoadBalancer).
 - **Railway & Render**: Native support due to the standardized `package.json` entry points and Docker integrations.
