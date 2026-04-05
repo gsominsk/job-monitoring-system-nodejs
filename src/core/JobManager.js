@@ -20,6 +20,7 @@ export class JobManager {
 
     this.timers = new Map();
     this.processes = new Map();
+    this.isShuttingDown = false;
 
     logger.info('JobManager initialized', {
       maxConcurrent: this.maxConcurrent,
@@ -122,6 +123,8 @@ export class JobManager {
    * @private
    */
   _handleJobExit(jobId, exitCode, signal) {
+    if (this.isShuttingDown) return;
+
     const job = this.jobs.get(jobId);
     if (!job) {
       logger.error('Job not found on exit', { jobId });
@@ -218,6 +221,7 @@ export class JobManager {
    */
   shutdown() {
     logger.info('Shutting down JobManager, clearing all processes and timers.');
+    this.isShuttingDown = true;
     for (const timer of this.timers.values()) {
       clearTimeout(timer);
     }

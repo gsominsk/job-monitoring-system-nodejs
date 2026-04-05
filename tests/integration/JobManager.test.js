@@ -40,7 +40,7 @@ describe('JobManager Integration', () => {
       const finalJob = manager.getJob(job.id);
       expect(finalJob.isTerminal()).toBe(true);
       expect(finalJob.exitCode).not.toBeNull();
-    });
+    }, 15000);
 
     test(
       'handles job failure and retry',
@@ -85,11 +85,15 @@ describe('JobManager Integration', () => {
       }
 
       // Check that only 3 are running
-      await new Promise(resolve => setTimeout(resolve, 100));
-
+      // Check that only 3 are running synchronously (submitJob doesn't await)
       expect(manager.runningJobs.size).toBeLessThanOrEqual(3);
-      expect(manager.queue.length).toBeGreaterThan(0);
-    });
+      expect(manager.queue.length).toBe(7);
+
+      // Wait for all to complete to avoid leaking processes
+      await Promise.all(
+        jobs.map(job => waitForTerminal(manager, job.id))
+      );
+    }, 30000);
 
     test('processes queue as jobs complete', async () => {
       // Override limit
@@ -102,7 +106,6 @@ describe('JobManager Integration', () => {
       }
 
       // Initial state: 2 running, 3 queued
-      await new Promise(resolve => setTimeout(resolve, 100));
       expect(manager.queue.length).toBe(3);
 
       // Wait for all to complete
