@@ -27,3 +27,6 @@ coverage/
 
 # Runtime
 *.pid
+
+# Build artifacts
+dist/
