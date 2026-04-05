@@ -4,7 +4,7 @@
   "description": "Cross-platform job monitoring system with process management and statistical analysis",
   "main": "src/index.js",
   "type": "module",
-  "bin": "src/index.js",
+  "bin": "dist/bundle.cjs",
   "pkg": {
     "assets": [
       "scripts/**/*"
@@ -16,7 +16,7 @@
     ]
   },
   "scripts": {
-    "build:exe": "npx esbuild src/index.js --bundle --platform=node --format=cjs --outfile=dist/bundle.cjs && npx pkg dist/bundle.cjs --targets node18-linux-x64,node18-macos-x64,node18-win-x64 --out-path dist",
+    "build:exe": "npx esbuild src/index.js --bundle --platform=node --format=cjs --outfile=dist/bundle.cjs && npx pkg package.json --out-path dist",
     "start": "node src/index.js",
     "dev": "NODE_ENV=development node src/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
