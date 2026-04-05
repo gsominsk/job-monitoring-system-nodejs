@@ -323,3 +323,5 @@ MIT
 
 ## Author
 gsominsk
+
+![CI/CD Pipeline](.specs/cicddeploy.png)
