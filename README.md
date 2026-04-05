@@ -318,10 +318,11 @@ npm run seed
 JOBS_COUNT=100 npm run seed
 ```
 
+![CI/CD Pipeline](.specs/cicddeploy.png)
+
 ## License
 MIT
 
 ## Author
 gsominsk
 
-![CI/CD Pipeline](.specs/cicddeploy.png)
