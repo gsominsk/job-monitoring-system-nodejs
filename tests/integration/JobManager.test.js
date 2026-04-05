@@ -23,16 +23,10 @@ describe('JobManager Integration', () => {
     test('submits and executes job successfully', async () => {
       const job = manager.submitJob('test-job', ['arg1']);
 
-      // Job may transition to RUNNING immediately if capacity available
-      expect([JOB_STATUS.QUEUED, JOB_STATUS.RUNNING]).toContain(job.status);
+      // Job transitions to RUNNING immediately if capacity available
+      expect(job.status).toBe(JOB_STATUS.RUNNING);
+      expect(job.pid).not.toBeNull();
       expect(manager.getAllJobs()).toHaveLength(1);
-
-      // Wait for job to transition to running
-      await waitForStatus(manager, job.id, JOB_STATUS.RUNNING);
-
-      const runningJob = manager.getJob(job.id);
-      expect(runningJob.status).toBe(JOB_STATUS.RUNNING);
-      expect(runningJob.pid).not.toBeNull();
 
       // Wait for job to complete (or fail)
       await waitForTerminal(manager, job.id);
