@@ -35,7 +35,7 @@ jobs:
         run: npm run lint
 
       - name: Check for security vulnerabilities
-        run: npm audit --audit-level=moderate
+        run: npm audit --audit-level=high
 
   # Job 2: Unit tests
   test-unit:
