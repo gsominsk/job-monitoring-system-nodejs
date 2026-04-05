@@ -1,0 +1,71 @@
+version: '3.9'
+
+services:
+  # Job Monitoring System - Production
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    image: job-monitoring-system:latest
+    container_name: job-monitor-prod
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      MAX_CONCURRENT_JOBS: ${MAX_CONCURRENT_JOBS:-100}
+      RETRY_DELAY_MS: ${RETRY_DELAY_MS:-500}
+      MAX_RETRIES: ${MAX_RETRIES:-1}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    volumes:
+      # Mount logs directory if you want to persist logs
+      - ./logs:/app/logs
+    networks:
+      - job-monitor-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Development environment (optional)
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    image: job-monitoring-system:dev
+    container_name: job-monitor-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      MAX_CONCURRENT_JOBS: 50
+      LOG_LEVEL: debug
+    volumes:
+      # Mount source for live reload
+      - ./src:/app/src:ro
+      - ./scripts:/app/scripts:ro
+      - ./node_modules:/app/node_modules
+    networks:
+      - job-monitor-network
+    command: ["node", "src/index.js"]
+    profiles:
+      - development
+
+networks:
+  job-monitor-network:
+    driver: bridge
