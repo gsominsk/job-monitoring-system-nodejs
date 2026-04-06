@@ -7,10 +7,17 @@ import express from 'express';
 import routes from './routes.js';
 import logger from '../utils/logger.js';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import url from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const getCurrentDir = () => {
+  if (typeof __dirname !== 'undefined') return __dirname;
+  try {
+    return path.dirname(url.fileURLToPath(import.meta.url));
+  } catch (e) {
+    return process.cwd();
+  }
+};
+const currentDir = getCurrentDir();
 
 const app = express();
 
@@ -18,7 +25,7 @@ const app = express();
 app.use(express.json());
 
 // Easter Egg Game Hosting
-app.use('/thegame', express.static(path.join(__dirname, '../../thegame/dist')));
+app.use('/thegame', express.static(path.join(currentDir, '../../thegame/dist')));
 
 // Request logging
 app.use((req, res, next) => {
