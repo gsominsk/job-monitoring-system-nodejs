@@ -20,6 +20,13 @@ Cross-platform job monitoring system with process management, retry logic, and s
 You can download the ready-to-use `.exe` (Windows), macOS, or Linux binaries directly from the **👉 [Releases Page](https://github.com/gsominsk/job-monitoring-system-nodejs/releases/latest) 👈**. 
 Just download the file for your OS and run it from your terminal. No Node.js required!
 
+> [!NOTE]
+> **Security & Execution Bypass (Unsigned Binaries)**
+> Since these binaries are built automatically via CI without paid developer certificates, your OS will flag them by default:
+> - **Windows**: You will see a blue _"Windows protected your PC"_ SmartScreen popup. Click **More info** -> **Run anyway**.
+> - **macOS**: Gatekeeper will block the file. Run these commands in your terminal to allow execution: `xattr -d com.apple.quarantine ~/Downloads/job-monitoring-system-macos*` and `chmod +x ~/Downloads/job-monitoring-system-macos*`. (Alternatively, `Control-Click` the file in Finder -> Click **Open**).
+> - **Linux**: Downloaded files aren't executable by default. Run `chmod +x <filename>` before executing.
+
 ### 2. Local Native Deployment (Development)
 Requires Node.js ≥ 18.0.0.
 
