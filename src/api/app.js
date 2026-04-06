@@ -24,8 +24,18 @@ const app = express();
 // Middleware
 app.use(express.json());
 
+let gameDistPath;
+if (process.pkg) {
+  // Inside the pkg snapshot, this bundle is located physically at `/snapshot/repo/dist/bundle.cjs`
+  // so `currentDir` resolves to the `dist` directory. We go up one level and enter `thegame/dist`.
+  gameDistPath = path.join(currentDir, '../thegame/dist');
+} else {
+  // In native node or docker execution, `currentDir` is `src/api`.
+  gameDistPath = path.join(currentDir, '../../thegame/dist');
+}
+
 // Easter Egg Game Hosting
-app.use('/thegame', express.static(path.join(currentDir, '../../thegame/dist')));
+app.use('/thegame', express.static(gameDistPath));
 
 // Request logging
 app.use((req, res, next) => {
