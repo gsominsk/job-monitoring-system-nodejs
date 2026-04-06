@@ -30,6 +30,7 @@ jobs:
           cd thegame
           npm ci
           npm run build
+          mv package.json package.json.bak
 
       - name: Build executables
         run: npm run build:exe
