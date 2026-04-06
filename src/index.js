@@ -16,6 +16,7 @@ const server = app.listen(port, () => {
     environment: nodeEnv,
     pid: process.pid
   });
+  console.log(`\n🎮 EASTER EGG MODE ACTIVATED: http://localhost:${port}/thegame\n`);
 });
 
 // Graceful shutdown

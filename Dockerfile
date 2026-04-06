@@ -36,6 +36,14 @@ RUN chmod +x scripts/dummy.sh scripts/dummy.bat
 # Run tests
 RUN npm run test:coverage
 
+# Stage 3.5: Build Easter Egg Game
+FROM base AS game-builder
+WORKDIR /app/thegame
+COPY thegame/package.json thegame/package-lock.json* ./
+RUN npm ci || npm install
+COPY thegame/ ./
+RUN npm run build
+
 # Stage 4: Production - minimal runtime image
 FROM node:22-alpine AS runner
 WORKDIR /app
@@ -47,6 +55,9 @@ RUN apk add --no-cache bash curl && \
 
 # Copy production dependencies from deps stage
 COPY --from=deps --chown=appuser:appgroup /app/node_modules ./node_modules
+
+# Copy built Easter Egg Game
+COPY --from=game-builder --chown=appuser:appgroup /app/thegame/dist ./thegame/dist
 
 # Copy application source
 COPY --chown=appuser:appgroup src ./src

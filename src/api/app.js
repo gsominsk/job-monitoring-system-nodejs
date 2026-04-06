@@ -6,11 +6,19 @@
 import express from 'express';
 import routes from './routes.js';
 import logger from '../utils/logger.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
 // Middleware
 app.use(express.json());
+
+// Easter Egg Game Hosting
+app.use('/thegame', express.static(path.join(__dirname, '../../thegame/dist')));
 
 // Request logging
 app.use((req, res, next) => {
