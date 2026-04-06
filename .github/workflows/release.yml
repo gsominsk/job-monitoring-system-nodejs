@@ -25,6 +25,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build Game Frontend
+        run: |
+          cd thegame
+          npm ci
+          npm run build
+
       - name: Build executables
         run: npm run build:exe
 
